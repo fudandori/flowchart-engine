@@ -1,5 +1,7 @@
 const ns = 'http://www.w3.org/2000/svg'
 
+const svg = document.getElementById('svg')
+
 const redirect = ev => {
     const page = ev.target.getAttribute('sub')
     window.location.href = `${page}.html`
@@ -16,34 +18,38 @@ const getVector = (origin, end) => {
     const frame1 = el1.getBoundingClientRect()
     const frame2 = el2.getBoundingClientRect()
     return {
-        x1: frame1.right - el1.offsetWidth / 2,
+        x: frame1.right - el1.offsetWidth / 2,
         y1: frame1.bottom,
-        x2: frame2.right - el2.offsetWidth / 2,
         y2: frame2.top - 5
     }
 }
 
-const createLine = (vector) => {
+const createLine = vector => {
     const line = document.createElementNS(ns, 'line')
-    line.setAttribute('x1', vector.x1)
+    line.setAttribute('x1', vector.x)
+    line.setAttribute('x2', vector.x)
     line.setAttribute('y1', vector.y1)
-    line.setAttribute('x2', vector.x2)
     line.setAttribute('y2', vector.y2)
     line.setAttribute('stroke', 'black')
     line.setAttribute('stroke-width', '2px')
+
+    return line
+}
+
+const createArrow = vector => {
+    const line = createLine(vector)
     line.setAttribute('class', 'arrow')
 
     return line
 }
 
-const drawLine = (from, to, svg) => {
+const drawArrow = (from, to) => {
     const vector = getVector(from, to)
-    const line = createLine(vector)
-
-    svg.appendChild(line)
+    const arrow = createArrow(vector)
+    svg.appendChild(arrow)
 }
 
-const createDefs = (svg) => {
+const createDefs = () => {
     const defs = document.createElementNS(ns, 'defs')
 
     const marker = document.createElementNS(ns, 'marker')
@@ -61,5 +67,10 @@ const createDefs = (svg) => {
     marker.appendChild(path)
     defs.appendChild(marker)
     svg.appendChild(defs)
+}
+
+const connect = (...items) => {
+    for (let i = 1; i < items.length; i++)
+        drawArrow(items[i - 1], items[i])
 }
 

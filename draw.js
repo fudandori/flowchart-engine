@@ -1,14 +1,9 @@
-const svg = document.getElementById('svg')
-
-const connect = (...items) => {
-    for (let i = 1; i < items.length; i++)
-        drawLine(items[i - 1], items[i], svg)
-}
-
 const draw = () => {
-    createDefs(svg)
-    connect('batch', 'fetch', 'filter', 'accounts', 'kafka')
+    createDefs()
+    connect('batch', 'fetch', 'filter', 'accounts', 'kafka', 'if')
+    connect('dosmth', 'end')
     link()
+    // draw functions (see docu)
 }
 
 const redraw = () => {

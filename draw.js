@@ -8,6 +8,7 @@ const connect = (...items) => {
 const draw = () => {
     createDefs(svg)
     connect('batch', 'fetch', 'filter', 'accounts', 'kafka')
+    link()
 }
 
 const redraw = () => {

@@ -12,23 +12,52 @@ const link = () => {
     subroutines.forEach(div => div.addEventListener('click', redirect));
 }
 
-const getVector = (origin, end) => {
-    const el1 = document.getElementById(origin)
-    const el2 = document.getElementById(end)
-    const frame1 = el1.getBoundingClientRect()
-    const frame2 = el2.getBoundingClientRect()
-    return {
-        x: frame1.right - el1.offsetWidth / 2,
-        y1: frame1.bottom,
-        y2: frame2.top - 5
-    }
+const topPoint = id => {
+    const el = document.getElementById(id)
+    const frame = el.getBoundingClientRect()
+
+    return new Point(frame.right - el.offsetWidth / 2, frame.top)
+}
+
+const bottomPoint = id => {
+    const el = document.getElementById(id)
+    const frame = el.getBoundingClientRect()
+
+    return new Point(frame.right - el.offsetWidth / 2, frame.bottom)
+}
+
+const leftPoint = id => {
+    const el = document.getElementById(id)
+    const frame = el.getBoundingClientRect()
+
+    return new Point(frame.left, frame.bottom - el.offsetHeight / 2)
+}
+
+const rightPoint = id => {
+    const el = document.getElementById(id)
+    const frame = el.getBoundingClientRect()
+
+    return new Point(frame.right, frame.bottom - el.offsetHeight / 2)
+}
+
+const getArrowVector = (origin, end) => {
+    //const delta = isConditional(el2) ? 34 : 5
+
+    const point1 = bottomPoint(origin)
+    const point2 = topPoint(end)
+
+    return new Vector()
+        .setX1(point1.x)
+        .setY1(point1.y)
+        .setX2(point2.x)
+        .setY2(point2.y - 5)
 }
 
 const createLine = vector => {
     const line = document.createElementNS(ns, 'line')
-    line.setAttribute('x1', vector.x)
-    line.setAttribute('x2', vector.x)
+    line.setAttribute('x1', vector.x1)
     line.setAttribute('y1', vector.y1)
+    line.setAttribute('x2', vector.x2)
     line.setAttribute('y2', vector.y2)
     line.setAttribute('stroke', 'black')
     line.setAttribute('stroke-width', '2px')
@@ -44,9 +73,60 @@ const createArrow = vector => {
 }
 
 const drawArrow = (from, to) => {
-    const vector = getVector(from, to)
+    const vector = getArrowVector(from, to)
     const arrow = createArrow(vector)
     svg.appendChild(arrow)
+}
+
+const forkLine = (origin, end, type) => {
+    const vector1 = new Vector()
+    const vector2 = new Vector()
+    let point1, point2, point3, topEnd
+
+    switch (type) {
+        case 1:
+            topEnd = topPoint(end)
+            point1 = leftPoint(origin)
+            point2 = { x: topEnd.x, y: point1.y }
+            point3 = topEnd.offsetY(-5)
+            break;
+
+        case 2:
+            topEnd = topPoint(end)
+            point1 = rightPoint(origin)
+            point2 = { x: topEnd.x, y: point1.y }
+            point3 = topEnd.offsetY(-5)
+            break;
+
+        case 3:
+            let rightEnd = rightPoint(end)
+            point1 = bottomPoint(origin)
+            point2 = { x: point1.x, y: rightEnd.y }
+            point3 = rightEnd.offsetX(5)
+            break;
+
+        case 4:
+            let leftEnd = leftPoint(end)
+            point1 = bottomPoint(origin)
+            point2 = { x: point1.x, y: leftEnd.y }
+            point3 = leftEnd.offsetX(-5)
+            break;
+    }
+
+    vector1
+        .setOrigin(point1)
+        .setEnd(point2)
+
+    vector2
+        .setOrigin(point2)
+        .setEnd(point3)
+
+    const line = createLine(vector1)
+    const arrow = createArrow(vector2)
+
+    svg.appendChild(line)
+    svg.appendChild(arrow)
+
 }
 
 const createDefs = () => {
@@ -73,4 +153,3 @@ const connect = (...items) => {
     for (let i = 1; i < items.length; i++)
         drawArrow(items[i - 1], items[i])
 }
-

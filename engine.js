@@ -40,25 +40,45 @@ const rightPoint = id => {
     return new Point(frame.right, frame.bottom - el.offsetHeight / 2)
 }
 
+const isConditional = id => document.getElementById(id).hasAttribute('if')
+
+const getDelta = (id, type) => {
+    let result
+    switch (type) {
+        case 1:
+            result = isConditional(id) ? -34 : -5
+            break;
+        case 2:
+            result = isConditional(id) ? -34 : -5
+            break;
+        case 3:
+            result = isConditional(id) ? 45 : 5
+            break;
+        case 4:
+            result = isConditional(id) ? -45 : -5
+            break;
+    }
+
+    return result
+}
+
 const getArrowVector = (origin, end) => {
-    //const delta = isConditional(el2) ? 34 : 5
+    const delta = isConditional(end) ? -34 : -5
 
-    const point1 = bottomPoint(origin)
-    const point2 = topPoint(end)
+    const p1 = bottomPoint(origin)
+    const p2 = topPoint(end)
 
-    return new Vector()
-        .setX1(point1.x)
-        .setY1(point1.y)
-        .setX2(point2.x)
-        .setY2(point2.y - 5)
+    p2.offsetY(delta)
+
+    return new Vector(p1, p2)
 }
 
 const createLine = vector => {
     const line = document.createElementNS(ns, 'line')
-    line.setAttribute('x1', vector.x1)
-    line.setAttribute('y1', vector.y1)
-    line.setAttribute('x2', vector.x2)
-    line.setAttribute('y2', vector.y2)
+    line.setAttribute('x1', vector.p1.x)
+    line.setAttribute('y1', vector.p1.y)
+    line.setAttribute('x2', vector.p2.x)
+    line.setAttribute('y2', vector.p2.y)
     line.setAttribute('stroke', 'black')
     line.setAttribute('stroke-width', '2px')
 
@@ -79,54 +99,58 @@ const drawArrow = (from, to) => {
 }
 
 const forkLine = (origin, end, type) => {
-    const vector1 = new Vector()
-    const vector2 = new Vector()
-    let point1, point2, point3, topEnd
+    const delta = getDelta(end, type)
+    const v1 = new Vector()
+    const v2 = new Vector()
+    let p1, p2, p3, p4, topEnd
 
     switch (type) {
         case 1:
             topEnd = topPoint(end)
-            point1 = leftPoint(origin)
-            point2 = { x: topEnd.x, y: point1.y }
-            point3 = topEnd.offsetY(-5)
+            p1 = leftPoint(origin)
+            p2 = { x: topEnd.x - 1, y: p1.y }
+            p3 = { x: topEnd.x, y: p1.y }
+            p4 = topEnd.offsetY(delta)
             break;
 
         case 2:
             topEnd = topPoint(end)
-            point1 = rightPoint(origin)
-            point2 = { x: topEnd.x, y: point1.y }
-            point3 = topEnd.offsetY(-5)
+            p1 = rightPoint(origin)
+            p2 = { x: topEnd.x + 1, y: p1.y }
+            p3 = { x: topEnd.x, y: p1.y }
+            p4 = topEnd.offsetY(delta)
             break;
 
         case 3:
             let rightEnd = rightPoint(end)
-            point1 = bottomPoint(origin)
-            point2 = { x: point1.x, y: rightEnd.y }
-            point3 = rightEnd.offsetX(5)
+            p1 = bottomPoint(origin)
+            p2 = { x: p1.x, y: rightEnd.y + 1 }
+            p3 = { x: p1.x, y: rightEnd.y }
+            p4 = rightEnd.offsetX(delta)
             break;
 
         case 4:
             let leftEnd = leftPoint(end)
-            point1 = bottomPoint(origin)
-            point2 = { x: point1.x, y: leftEnd.y }
-            point3 = leftEnd.offsetX(-5)
+            p1 = bottomPoint(origin)
+            p2 = { x: p1.x, y: leftEnd.y + 1 }
+            p3 = { x: p1.x, y: leftEnd.y }
+            p4 = leftEnd.offsetX(delta)
             break;
     }
 
-    vector1
-        .setOrigin(point1)
-        .setEnd(point2)
+    v1
+        .setOrigin(p1)
+        .setEnd(p2)
 
-    vector2
-        .setOrigin(point2)
-        .setEnd(point3)
+    v2
+        .setOrigin(p3)
+        .setEnd(p4)
 
-    const line = createLine(vector1)
-    const arrow = createArrow(vector2)
+    const line = createLine(v1)
+    const arrow = createArrow(v2)
 
     svg.appendChild(line)
     svg.appendChild(arrow)
-
 }
 
 const createDefs = () => {

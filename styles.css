@@ -43,7 +43,7 @@ div[sub] {
   );
 }
 
-div[yes] {
+div[if] {
   border: none;
   display: flex;
   align-items: center;
@@ -53,7 +53,7 @@ div[yes] {
   background-color: transparent;
 }
 
-div[yes] div {
+div[if] div {
   width: 6em;
   height: 6em;
   transform: rotate(-45deg) skew(20deg, 20deg);
@@ -63,7 +63,7 @@ div[yes] div {
   z-index: 5;
 }
 
-div[yes] span {
+div[if] span {
     z-index: 6;
 }
 
@@ -74,10 +74,7 @@ div[container] {
     width: 40em;
     background-color: transparent;
     border: none;
-}
-
-div[container] div {
-    margin: 0 3em;
+    margin: 0;
 }
 
 .arrow {

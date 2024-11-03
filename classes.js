@@ -42,67 +42,45 @@ class Point {
 }
 
 class Vector {
-    get x1() {
-        return this._x1;
+
+    constructor(p1, p2) {
+        this._p1 = p1
+        this._p2 = p2
     }
 
-    setX1(value) {
-        this._x1 = value;
+    get p1() {
+        return this._p1;
+    }
+
+    setP1(value) {
+        this._p1 = value;
         return this;
     }
 
-    set x1(value) {
-        this.x1(value);
+    set p1(value) {
+        this.setP1(value);
     }
 
-    get x2() {
-        return this._x2;
+    get p2() {
+        return this._p2;
     }
 
-    setX2(value) {
-        this._x2 = value;
+    setP2(value) {
+        this._p2 = value;
         return this;
     }
 
-    set x2(value) {
-        this.setX2(value);
+    set p2(value) {
+        this.setP2(value);
     }
-
-    get y1() {
-        return this._y1;
-    }
-
-    setY1(value) {
-        this._y1 = value;
-        return this;
-    }
-
-    set y1(value) {
-        this.setY1(value);
-    }
-
-    get y2() {
-        return this._y2;
-    }
-
-    setY2(value) {
-        this._y2 = value;
-        return this;
-    }
-
-    set y2(value) {
-        this.setY2(value);
-    }
-
+    
     setOrigin(value) {
-        this._x1 = value.x
-        this._y1 = value.y
+        this._p1 = value
         return this
     }
 
     setEnd(value) {
-        this._x2 = value.x
-        this._y2 = value.y
+        this._p2 = value
         return this
     }
 }

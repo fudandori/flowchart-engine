@@ -6,11 +6,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="styles.css">
+    <script defer src="classes.js"></script>
     <script defer src="engine.js"></script>
     <script defer src="draw.js"></script>
 </head>
 
 <body onresize="redraw()">
+    <div id="batch">BATCH TRIGGER</div>
+    <div id="fetch" sub="test">DATABASE FETCH</div>
+    <div id="filter">FILTER OPERATION</div>
+    <div id="accounts">ACCOUNTS DEFINITIONS</div>
+    <div id="kafka" sub="test">GENERATE EVENT</div>
+    <div if id="if" yes="calc" no="end"><div id="foo"></div><span>GENERATE EVENT</span></div>
+    <div container>
+        <div if id="calc" yes="calc" no="end"><div id="foo2"></div><span>CALCULATE?</span></div>
+        <div id="error">SEND ERROR</div>
+    </div>
+    <div id="dosmth">DO SOMETHING</div>
+    <div id="end">END</div>
+
+
     <svg id="svg" width="100%" height="100%"></svg>
 </body>
 

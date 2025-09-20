@@ -13,6 +13,22 @@
 
 <body onresize="redraw()" onscroll="redraw()">
     <svg id="svg" width="100%" height="100%"></svg>
+    <div id="batch" next="fetch">BATCH TRIGGER</div>
+    <div id="fetch" next="filter" sub>DATABASE FETCH</div>
+    <div id="filter" next="accounts">FILTER OPERATION</div>
+    <div id="accounts" next="kafka">ACCOUNTS DEFINITIONS</div>
+    <div id="kafka" next="if" sub>GENERATE EVENT</div>
+    <div id="if" if>CONDITION 1</div>
+    <div container>
+        <div if id="calc">CONDITION 2</div>
+        <div id="error">SEND ERROR</div>
+    </div>  
+    <div id="dosmth">DO SOMETHING</div>
+    <div container>
+        <div id="error2">SEND ERROR</div>
+        <div id="error3">SEND ERROR</div>
+    </div>
+    <div id="end">END</div>
 </body>
 
 </html> 

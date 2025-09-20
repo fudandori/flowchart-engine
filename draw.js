@@ -1,6 +1,10 @@
 const draw = () => {
     createDefs()
     connect()
+    forkLine('if', 'calc', 1)
+    forkLine('if', 'calc', 3)
+    forkLine('dosmth', 'error2', 3)
+    forkLine('calc', 'dosmth', 4)
     link()
 }
 

@@ -99,6 +99,8 @@ const drawArrow = (from, to) => {
 }
 
 const forkLine = (origin, end, type) => {
+    if(type === 3 && isConditional(end)) end = document.getElementById(end).firstChild.id
+
     const delta = getDelta(end, type)
     const v1 = new Vector()
     const v2 = new Vector()
@@ -171,9 +173,4 @@ const createDefs = () => {
     marker.appendChild(path)
     defs.appendChild(marker)
     svg.appendChild(defs)
-}
-
-const connect = (...items) => {
-    for (let i = 1; i < items.length; i++)
-        drawArrow(items[i - 1], items[i])
 }

@@ -1,5 +1,4 @@
 const ns = 'http://www.w3.org/2000/svg'
-
 const svg = document.getElementById('svg')
 
 const redirect = ev => {
@@ -9,7 +8,7 @@ const redirect = ev => {
 
 const link = () => {
     const subroutines = Array.from(document.querySelectorAll('[sub]'))
-    subroutines.forEach(div => div.addEventListener('click', redirect));
+    subroutines.forEach(div => div.addEventListener('click', redirect))
 }
 
 const topPoint = id => {
@@ -47,16 +46,16 @@ const getDelta = (id, type) => {
     switch (type) {
         case 1:
             result = isConditional(id) ? -34 : -5
-            break;
+            break
         case 2:
             result = isConditional(id) ? -34 : -5
-            break;
+            break
         case 3:
             result = isConditional(id) ? 45 : 5
-            break;
+            break
         case 4:
             result = isConditional(id) ? -45 : -5
-            break;
+            break
     }
 
     return result
@@ -99,7 +98,7 @@ const drawArrow = (from, to) => {
 }
 
 const forkLine = (origin, end, type) => {
-    if(type === 3 && isConditional(end)) end = document.getElementById(end).firstChild.id
+    if (type === 3 && isConditional(end)) end = document.getElementById(end).firstChild.id
 
     const delta = getDelta(end, type)
     const v1 = new Vector()
@@ -113,7 +112,7 @@ const forkLine = (origin, end, type) => {
             p2 = { x: topEnd.x - 1, y: p1.y }
             p3 = { x: topEnd.x, y: p1.y }
             p4 = topEnd.offsetY(delta)
-            break;
+            break
 
         case 2:
             topEnd = topPoint(end)
@@ -121,7 +120,7 @@ const forkLine = (origin, end, type) => {
             p2 = { x: topEnd.x + 1, y: p1.y }
             p3 = { x: topEnd.x, y: p1.y }
             p4 = topEnd.offsetY(delta)
-            break;
+            break
 
         case 3:
             let rightEnd = rightPoint(end)
@@ -129,7 +128,7 @@ const forkLine = (origin, end, type) => {
             p2 = { x: p1.x, y: rightEnd.y + 1 }
             p3 = { x: p1.x, y: rightEnd.y }
             p4 = rightEnd.offsetX(delta)
-            break;
+            break
 
         case 4:
             let leftEnd = leftPoint(end)
@@ -137,7 +136,7 @@ const forkLine = (origin, end, type) => {
             p2 = { x: p1.x, y: leftEnd.y + 1 }
             p3 = { x: p1.x, y: leftEnd.y }
             p4 = leftEnd.offsetX(delta)
-            break;
+            break
     }
 
     v1
@@ -153,24 +152,4 @@ const forkLine = (origin, end, type) => {
 
     svg.appendChild(line)
     svg.appendChild(arrow)
-}
-
-const createDefs = () => {
-    const defs = document.createElementNS(ns, 'defs')
-
-    const marker = document.createElementNS(ns, 'marker')
-    marker.setAttribute('id', 'arrow')
-    marker.setAttribute('viewBox', '0 0 10 10')
-    marker.setAttribute('refX', '5')
-    marker.setAttribute('refY', '5')
-    marker.setAttribute('markerWidth', '5')
-    marker.setAttribute('markerHeight', '5')
-    marker.setAttribute('orient', 'auto-start-reverse')
-
-    const path = document.createElementNS(ns, 'path')
-    path.setAttribute('d', 'M 0 0 L 10 5 L 0 10 z')
-
-    marker.appendChild(path)
-    defs.appendChild(marker)
-    svg.appendChild(defs)
 }

@@ -18,6 +18,26 @@ svg {
   left: 0;
 }
 
+/* Tooltip container FIRST so it's not affected by generic div styles */
+#tooltip-container {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    min-width: 0;
+    pointer-events: none;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* Now generic div styles */
 div {
   border: 2px solid black;
   padding: 6px;
@@ -90,4 +110,103 @@ body > div:last-of-type {
 
 body > div:first-of-type {
   margin-top: 2em;
+}
+
+[db] {
+    position: relative;
+}
+
+[db] .db-icon {
+    display: inline-block;
+    width: 35px;
+    height: 35px;
+    background-image: url('./assets/database.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: absolute;
+    right: -40px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: auto;
+    z-index: 2;
+    cursor: pointer;
+}
+
+[db] .db-tooltip {
+    display: none;
+    position: fixed;
+    left: 12px;
+    top: 12px;
+    background: #333;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.9em;
+    white-space: nowrap;
+    z-index: 1000;
+    min-width: 120px;
+    transition: top 0.2s;
+}
+
+[db] .db-tooltip.stacked {
+    left: 12px;
+    /* top will be set by JS for stacking */
+    margin-top: 0;
+}
+
+[db] .db-tooltip.pinned {
+    display: block;
+}
+
+[db] .db-tooltip.stacked {
+    left: 0;
+    top: auto;
+    bottom: -10px;
+    margin-top: 10px;
+    /* Each stacked tooltip will be positioned below the previous one by JS */
+}
+
+.tooltip-notification {
+    background: #333;
+    color: #fff;
+    padding: 8px 16px 8px 32px;
+    border-radius: 6px;
+    font-size: 0.95em;
+    white-space: pre-line;
+    min-width: 120px;
+    max-width: 320px;
+    word-break: break-word;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    pointer-events: auto;
+    margin-bottom: 2px;
+    opacity: 0;
+    transform: translateY(-32px);
+    transition: opacity 200ms, transform 200ms;
+}
+
+.tooltip-notification.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.tooltip-notification .close-icon {
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    background: url('./assets/database.png') center/contain no-repeat;
+    opacity: 0.7;
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+.tooltip-notification.pinned {
+    background: #1976d2; /* Bright blue */
+    color: #fff;
+    border: 2px solid #1565c0;
+    box-shadow: 0 4px 16px rgba(25, 118, 210, 0.25);
 }

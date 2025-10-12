@@ -5,8 +5,11 @@ const draw = () => {
     connect()
     forkLine('if', 'calc', 1)
     forkLine('if', 'calc', 3)
+    forkLine('if', 'error', 4)
+    forkLine('if', 'error', 2)
     forkLine('dosmth', 'error2', 3)
     forkLine('calc', 'dosmth', 4)
+    forkLine('error', 'dosmth', 3)
     link()
 }
 
@@ -15,11 +18,11 @@ const redraw = () => {
     draw()
 }
 
-const showTooltip = (id, text) => {
+const showTooltip = (id, text, type) => {
     const tooltip = document.createElement('div')
     tooltip.id = `${id}-tooltip`
     tooltip.textContent = text
-    tooltip.classList.add('tooltip-notification', 'visible')
+    tooltip.classList.add('tooltip-notification', 'visible', type)
     tooltipContainer.appendChild(tooltip)
 }
 
@@ -35,17 +38,18 @@ const initIcons = () => {
             tooltipMap[key] = value;
         })
 
-    const icons = document.querySelectorAll('[db] .db-icon')
+    const icons = document.querySelectorAll('.icon')
 
     icons.forEach((icon, i) => {
-        icon.id = 'icon-' + i
+        icon.id = `icon-${i}`
 
         const text = tooltipMap[icon.parentElement.id]
 
         icon.addEventListener('mouseenter', () => {
             const tooltip = tooltipContainer.querySelector(`#${icon.id}-tooltip`)
             if (!tooltip) {
-                showTooltip(icon.id, text)
+                const type = icon.parentElement.hasAttribute('db') ? 'db' : icon.parentElement.hasAttribute('kafka') ? 'kafka' : 'api'
+                showTooltip(icon.id, text, type)
             }
         })
 
@@ -87,17 +91,12 @@ const renderIfs = () => {
 }
 
 const renderDbs = () => {
-    const elements = document.querySelectorAll('div[db]');
+    const elements = document.querySelectorAll('[db], [kafka], [api]');
 
     elements.forEach(elem => {
         const dbIcon = document.createElement('span')
-        dbIcon.classList.add('db-icon')
-
-        const dbTooltip = document.createElement('span')
-        dbTooltip.classList.add('db-tooltip')
-
+        dbIcon.classList.add('icon')
         elem.appendChild(dbIcon)
-        elem.appendChild(dbTooltip)
     })
 
     initIcons()

@@ -19,15 +19,15 @@
     <div id="filter" next="accounts" db>FILTER OPERATION</div>
     <div id="accounts" next="kafka">ACCOUNTS DEFINITIONS</div>
     <div id="kafka" next="if" sub>GENERATE EVENT</div>
-    <div id="if" if>CONDITION 1</div>
+    <div id="if">CONDITION 1</div>
     <div container>
         <div if id="calc">CONDITION 2</div>
-        <div id="error" db>SEND ERROR</div>
+        <div id="error" if>SEND ERROR</div>
     </div>
     <div id="dosmth">DO SOMETHING</div>
     <div container>
         <div id="error2">SEND ERROR</div>
-        <div id="error3" db>SEND ERROR</div>
+        <div id="error3">SEND ERROR</div>
     </div>
     <div id="end">END</div>
 
@@ -36,7 +36,7 @@
     <tooltips>
         <error3>Database info dwqd qdqwdqdq dqw dqw dqwwdqwd qwd qwd qwdqwwqdw qd qwd qwd qd q dq two</error3>
         <filter>Database info</filter>
-        <error>TUS MUERTOS EN SALCHIPAPA</error>
+        <dosmth>TUS MUERTOS EN SALCHIPAPA</dosmth>
     </tooltips>
 </body>
 

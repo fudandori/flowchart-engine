@@ -8,7 +8,7 @@ body {
   flex-direction: column;
   flex-wrap: nowrap;
   align-items: center;
-  background-color: blanchedalmond;
+  background-color: lightseagreen;
 }
 
 svg {
@@ -18,32 +18,30 @@ svg {
   left: 0;
 }
 
-/* Tooltip container FIRST so it's not affected by generic div styles */
 #tooltip-container {
-    position: fixed;
-    top: 12px;
-    left: 12px;
-    z-index: 2000;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-    min-width: 0;
-    pointer-events: none;
-    background: none;
-    border: none;
-    padding: 0;
-    margin: 0;
-    box-shadow: none;
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  min-width: 0;
+  pointer-events: none;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  box-shadow: none;
 }
 
-/* Now generic div styles */
 div {
   border: 2px solid black;
   padding: 6px;
   width: fit-content;
   margin-bottom: 3em;
-  background-color: honeydew;
+  background-color: #6ed1a9;
 }
 
 div[sub] {
@@ -85,17 +83,17 @@ div[if] div {
 }
 
 div[if] span {
-    z-index: 6;
+  z-index: 6;
 }
 
 div[container] {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 40em;
-    background-color: transparent;
-    border: none;
-    margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 40em;
+  background-color: transparent;
+  border: none;
+  margin: 0;
 }
 
 .arrow {
@@ -112,101 +110,91 @@ body > div:first-of-type {
   margin-top: 2em;
 }
 
-[db] {
-    position: relative;
+.icon {
+  display: inline-block;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: absolute;
+  right: -40px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: auto;
+  z-index: 2;
+  cursor: pointer;
 }
 
-[db] .db-icon {
-    display: inline-block;
-    width: 35px;
-    height: 35px;
-    background-image: url('./assets/database.png');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    position: absolute;
-    right: -40px;
-    top: 50%;
-    transform: translateY(-50%);
-    pointer-events: auto;
-    z-index: 2;
-    cursor: pointer;
+[db],
+[kafka],
+[api] {
+  position: relative;
 }
 
-[db] .db-tooltip {
-    display: none;
-    position: fixed;
-    left: 12px;
-    top: 12px;
-    background: #333;
-    color: #fff;
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 0.9em;
-    white-space: nowrap;
-    z-index: 1000;
-    min-width: 120px;
-    transition: top 0.2s;
+[db] .icon {
+  width: 35px;
+  height: 35px;
+  background-image: url("./assets/database.png");
 }
 
-[db] .db-tooltip.stacked {
-    left: 12px;
-    /* top will be set by JS for stacking */
-    margin-top: 0;
+[kafka] .icon {
+  width: 45px;
+  height: 45px;
+  background-image: url("./assets/kafka.png");
 }
 
-[db] .db-tooltip.pinned {
-    display: block;
+[api] .icon {
+  width: 35px;
+  height: 35px;
+  background-image: url("./assets/http.png");
 }
 
-[db] .db-tooltip.stacked {
-    left: 0;
-    top: auto;
-    bottom: -10px;
-    margin-top: 10px;
-    /* Each stacked tooltip will be positioned below the previous one by JS */
+.api {
+  background: #EC7FA9;
+}
+
+.db {
+  background: #7AB2D3;
+}
+
+.kafka {
+  background: #A4B465;
 }
 
 .tooltip-notification {
-    background: #333;
-    color: #fff;
-    padding: 8px 16px 8px 32px;
-    border-radius: 6px;
-    font-size: 0.95em;
-    white-space: pre-line;
-    min-width: 120px;
-    max-width: 320px;
-    word-break: break-word;
-    position: relative;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    pointer-events: auto;
-    margin-bottom: 2px;
-    opacity: 0;
-    transform: translateY(-32px);
-    transition: opacity 200ms, transform 200ms;
+  color: black;
+  padding: 0.5em;
+  border-radius: 6px;
+  font-size: 0.95em;
+  white-space: pre-line;
+  min-width: 120px;
+  max-width: 320px;
+  word-break: break-word;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  pointer-events: auto;
+  margin-bottom: 2px;
+  opacity: 0;
+  transform: translateY(-32px);
+  transition: opacity 200ms, transform 200ms;
 }
 
 .tooltip-notification.visible {
-    opacity: 1;
-    transform: translateY(0);
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.tooltip-notification .close-icon {
-    position: absolute;
-    left: 8px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 16px;
-    height: 16px;
-    background: url('./assets/database.png') center/contain no-repeat;
-    opacity: 0.7;
-    cursor: pointer;
-    pointer-events: auto;
+.pinned {
+  color: white;
 }
 
-.tooltip-notification.pinned {
-    background: #1976d2; /* Bright blue */
-    color: #fff;
-    border: 2px solid #1565c0;
-    box-shadow: 0 4px 16px rgba(25, 118, 210, 0.25);
+.pinned.db {
+  background: #4A628A;
+}
+
+.pinned.api {
+  background: #BE5985;
+}
+
+.pinned.kafka {
+  background: #626F47;
 }

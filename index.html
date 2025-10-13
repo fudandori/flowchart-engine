@@ -11,33 +11,35 @@
     <script defer src="parser.js"></script>
 </head>
 
-<body onresize="redraw()" onscroll="redraw()">
+<body>
     <svg id="svg" width="100%" height="100%"></svg>
-    
-    <div id="batch" next="fetch">BATCH TRIGGER</div>
-    <div id="fetch" next="filter" sub>DATABASE FETCH</div>
-    <div id="filter" next="accounts" db>FILTER OPERATION</div>
-    <div id="accounts" next="kafka">ACCOUNTS DEFINITIONS</div>
-    <div id="kafka" next="if" sub>GENERATE EVENT</div>
-    <div id="if">CONDITION 1</div>
-    <div container>
-        <div if id="calc">CONDITION 2</div>
-        <div id="error" if>SEND ERROR</div>
-    </div>
-    <div id="dosmth">DO SOMETHING</div>
-    <div container>
-        <div id="error2">SEND ERROR</div>
-        <div id="error3">SEND ERROR</div>
-    </div>
-    <div id="end">END</div>
-
     <div id="tooltip-container"></div>
-
+    
+    <!-- tooltips definition -->
     <tooltips>
         <error3>Database info dwqd qdqwdqdq dqw dqw dqwwdqwd qwd qwd qwdqwwqdw qd qwd qwd qd q dq two</error3>
         <filter>Database info</filter>
         <dosmth>TUS MUERTOS EN SALCHIPAPA</dosmth>
     </tooltips>
+
+    <!-- flowchart definition -->
+    <step id="batch" next="fetch">BATCH TRIGGER</step>
+    <step id="fetch">DATABASE FETCH</step>
+    <db id="filter" next="fetch">FILTER OPERATION</db>
+    <step id="accounts" next="kafka">ACCOUNTS DEFINITIONS</step>
+    <step id="kafka" next="if">GENERATE EVENT</step>
+    <step id="if">CONDITION 1</step>
+    <group>
+        <if id="calc">CONDITION 2</if>
+        <if id="error">SEND ERROR</if>
+    </group>
+    <step id="dosmth" next="if">DO SOMETHING</step>
+    <group>
+        <api id="error2">SEND ERROR2</api>
+        <kafka id="error3">SEND ERROR3</kafka>
+        <db id="error4">SEND ERROR4</db>
+    </group>
+    <step id="end">END</step>
 </body>
 
 </html>

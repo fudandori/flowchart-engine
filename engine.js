@@ -39,6 +39,13 @@ const rightPoint = id => {
   return new Point(frame.right, frame.bottom - el.offsetHeight / 2)
 }
 
+const centerPoint = id => {
+  const el = document.getElementById(id)
+  const frame = el.getBoundingClientRect()
+
+  return new Point(frame.right - el.offsetWidth / 2, frame.bottom - el.offsetHeight / 2)
+}
+
 const isConditional = id => document.getElementById(id).hasAttribute('if')
 
 const specialDelta = id => {
@@ -50,32 +57,36 @@ const specialDelta = id => {
 }
 
 const getDelta = (id, type) => {
-  let result
   switch (type) {
     case 1:
-      result = isConditional(id) ? -34 : -5
-      break
     case 2:
-      result = isConditional(id) ? -34 : -5
-      break
+      return isConditional(id) ? -34 : -5
     case 3:
-      result = specialDelta(id)
-      break
+      return specialDelta(id)
     case 4:
-      result = isConditional(id) ? -45 : -5
-      break
+      return isConditional(id) ? -45 : -5
   }
-
-  return result
 }
 
 const getArrowVector = (origin, end) => {
   const delta = isConditional(end) ? -34 : -5
 
-  const p1 = bottomPoint(origin)
-  const p2 = topPoint(end)
+  let p1, p2
 
-  p2.offsetY(delta)
+  if (centerPoint(origin).y < centerPoint(end).y) {
+
+    p1 = bottomPoint(origin)
+    p2 = topPoint(end)
+
+    p2.offsetY(delta)
+
+    return new Vector(p1, p2)
+  }
+
+  p1 = topPoint(origin)
+  p2 = bottomPoint(end)
+
+  p2.offsetY(-delta)
 
   return new Vector(p1, p2)
 }
@@ -106,8 +117,6 @@ const drawArrow = (from, to) => {
 }
 
 const forkLine = (origin, end, type) => {
-  //if (type === 3 && isConditional(end)) end = document.getElementById(end).firstChild.id
-
   const delta = getDelta(end, type)
   const v1 = new Vector()
   const v2 = new Vector()

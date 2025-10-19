@@ -28,10 +28,10 @@
     <db id="filter" next="fetch">FILTER OPERATION</db>
     <step id="accounts" next="kafka">ACCOUNTS DEFINITIONS</step>
     <step id="kafka" next="if">GENERATE EVENT</step>
-    <step id="if">CONDITION 1</step>
+    <if id="if" fork="calc,2;error,1">CONDITION 1</if>
     <group>
         <if id="calc">CONDITION 2</if>
-        <if id="error">SEND ERROR</if>
+        <if id="error" fork="dosmth,3">SEND ERROR</if>
     </group>
     <step id="dosmth" next="if">DO SOMETHING</step>
     <group>

@@ -127,6 +127,16 @@ const connect = () => {
     .forEach(el => {
       drawArrow(el.id, el.getAttribute("next"))
     })
+
+  document.querySelectorAll("div[fork]")
+    .forEach(el => {
+      el.getAttribute("fork")
+        .split(';')
+        .forEach(fork => {
+          const split = fork.split(',')
+          forkLine(el.id, split[0], parseInt(split[1]))
+        })
+    })
 }
 
 const createDefs = () => {

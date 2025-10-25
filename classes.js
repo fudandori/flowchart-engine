@@ -31,13 +31,11 @@ class Point {
     }
 
     offsetX(value) {
-        this._x += value
-        return this
+        return new Point(this._x + value, this._y)
     }
 
     offsetY(value) {
-        this._y += value
-        return this
+        return new Point(this._x, this._y + value)
     }
 }
 
@@ -73,7 +71,7 @@ class Vector {
     set p2(value) {
         this.setP2(value);
     }
-    
+
     setOrigin(value) {
         this._p1 = value
         return this

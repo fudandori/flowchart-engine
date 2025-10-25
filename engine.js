@@ -48,24 +48,12 @@ const centerPoint = id => {
 
 const isConditional = id => document.getElementById(id).hasAttribute('if')
 
-const specialDelta = id => {
+const getDelta = id => {
   const el = document.getElementById(id)
   if (isConditional(id)) return 45
   if (el.hasAttribute('db') || el.hasAttribute('api')) return 45
   if (el.hasAttribute('kafka')) return 35
   return 5
-}
-
-const getDelta = (id, type) => {
-  switch (type) {
-    case 1:
-    case 2:
-      return isConditional(id) ? -34 : -5
-    case 3:
-      return specialDelta(id)
-    case 4:
-      return isConditional(id) ? -45 : -5
-  }
 }
 
 const getArrowVector = (origin, end) => {
@@ -116,30 +104,55 @@ const drawArrow = (from, to) => {
   svg.appendChild(arrow)
 }
 
+const selectPort = (origin, end) => {
+  const d = getDelta(end)
+  const diff = centerPoint(origin).x - centerPoint(end).x
+  if (Math.abs(diff) < 3) {
+    return bottomPoint(end).offsetY(d)
+  } else if (diff < 0) {
+    return leftPoint(end).offsetX(-d)
+  }
+
+  return rightPoint(end).offsetX(d)
+}
+
+const midpointY = (origin, end) => {
+  return (centerPoint(origin).y + centerPoint(end).y) / 2
+}
+
+const getVertex = (origin, end, x1) => {
+  const abs = Math.abs(centerPoint(origin).x - centerPoint(end).x)
+
+  return abs > 10
+    ? new Point(x1, centerPoint(end).y)
+    : new Point(x1, midpointY(origin, end))
+}
+
 const forkLine = (origin, end, type) => {
-  const delta = getDelta(end, type)
+
   const v1 = new Vector()
   const v2 = new Vector()
-  let p1, p2, p3, p4, topEnd
+  let p1, p2, p3, p4, vertex
+
+
 
   switch (type) {
-    case 1:
-      topEnd = topPoint(end)
-      p1 = leftPoint(origin)
-      p2 = { x: topEnd.x - 1, y: p1.y }
+    case "top":
+      p1 = topPoint(origin)
+      vertex = getVertex(origin, end, p1.x)
+      p2 = vertex.offsetY(-1)
+      p3 = vertex
+      p4 = selectPort(origin, end)
+      break
+
+    case "bottom":
+      p1 = bottomPoint(origin)
+      p2 = { x: topEnd.x, y: p1.y }
       p3 = { x: topEnd.x, y: p1.y }
       p4 = topEnd.offsetY(delta)
       break
 
-    case 2:
-      topEnd = topPoint(end)
-      p1 = rightPoint(origin)
-      p2 = { x: topEnd.x + 1, y: p1.y }
-      p3 = { x: topEnd.x, y: p1.y }
-      p4 = topEnd.offsetY(delta)
-      break
-
-    case 3:
+    case "left":
       let rightEnd = rightPoint(end)
       p1 = bottomPoint(origin)
       p2 = { x: p1.x, y: rightEnd.y + 1 }
@@ -147,7 +160,7 @@ const forkLine = (origin, end, type) => {
       p4 = rightEnd.offsetX(delta)
       break
 
-    case 4:
+    case "right":
       let leftEnd = leftPoint(end)
       p1 = bottomPoint(origin)
       p2 = { x: p1.x, y: leftEnd.y + 1 }

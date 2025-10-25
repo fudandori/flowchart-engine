@@ -134,7 +134,7 @@ const connect = () => {
         .split(';')
         .forEach(fork => {
           const split = fork.split(',')
-          forkLine(el.id, split[0], parseInt(split[1]))
+          forkLine(el.id, split[0], split[1])
         })
     })
 }

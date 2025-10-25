@@ -27,13 +27,13 @@
     <step id="fetch">DATABASE FETCH</step>
     <db id="filter" next="fetch">FILTER OPERATION</db>
     <step id="accounts" next="kafka">ACCOUNTS DEFINITIONS</step>
-    <step id="kafka" next="if">GENERATE EVENT</step>
-    <if id="if" fork="calc,2;error,1">CONDITION 1</if>
+    <step id="kafka">GENERATE EVENT</step>
+    <if id="if">CONDITION 1</if>
     <group>
-        <if id="calc">CONDITION 2</if>
-        <if id="error" fork="dosmth,3">SEND ERROR</if>
+        <if id="calc" >CONDITION 2</if>
+        <if id="error" >SEND ERROR</if>
     </group>
-    <step id="dosmth" next="if">DO SOMETHING</step>
+    <if id="dosmth" fork="if,top">DO SOMETHING</if>
     <group>
         <api id="error2">SEND ERROR2</api>
         <kafka id="error3">SEND ERROR3</kafka>

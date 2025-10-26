@@ -1,6 +1,8 @@
 const ns = 'http://www.w3.org/2000/svg'
 const svg = document.getElementById('svg')
 
+const boxMap = {}
+
 const redirect = ev => {
   const page = ev.target.getAttribute('sub')
   if (page) window.location.href = `${page}.html`
@@ -37,7 +39,7 @@ const rightPoint = id => {
   const frame = el.getBoundingClientRect()
 
   return new Point(frame.right, frame.bottom - el.offsetHeight / 2)
-}
+} 
 
 const centerPoint = id => {
   const el = document.getElementById(id)
@@ -95,12 +97,7 @@ const createArrow = vector => {
   return line
 }
 
-const drawArrow = (from, to) => {
-  const fromPoint = centerPoint(from)
-  const toPoint = centerPoint(to)
-  const origin = new Box(from, fromPoint)
-  const end = new Box(to, toPoint)
-
+const drawArrow = (origin, end) => {
   const vector = getArrowVector(origin, end)
   const arrow = createArrow(vector)
   svg.appendChild(arrow)
@@ -155,19 +152,20 @@ const getHzVertex = (origin, end, y1) => {
     : new Point(centerPoint(end).x, midpointX(origin, end))
 }
 
-const forkLine = (origin, end, type) => {
+const forkLine = (from, target, type) => {
 
-  const v1 = new Vector()
-  const v2 = new Vector()
-  let p1, p2, p3, p4, vertex
+  const origin = new Box(from)
+  const end = new Box(target)
 
+  const [v1, v2] = origin.getLvectors(end, type)
+
+  // if top OR bottom AND vertical aligned - 1 vector
+  // if left OR right and horizontal aligned - 1 vector
+
+  // else
   switch (type) {
     case "top":
-      p1 = topPoint(origin)
-      vertex = getVertex(origin, end, p1.x)
-      p2 = vertex.offsetY(-1)
-      p3 = vertex
-      p4 = selectPort(origin, end)
+
       break
 
     case "bottom":

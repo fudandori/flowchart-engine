@@ -125,7 +125,9 @@ const renderGroups = () => {
 const connect = () => {
   document.querySelectorAll("div[next]")
     .forEach(el => {
-      drawArrow(el.id, el.getAttribute("next"))
+      const origin = new Box(el.id)
+      const end = new Box(el.getAttribute("next"))
+      drawArrow(origin, end)
     })
 
   document.querySelectorAll("div[fork]")
@@ -134,7 +136,12 @@ const connect = () => {
         .split(';')
         .forEach(fork => {
           const split = fork.split(',')
-          forkLine(el.id, split[0], split[1])
+          
+          const origin = new Box(el.id)
+          const end = new Box(split[0])
+          const type = split[1]
+
+          forkLine(origin, end, type)
         })
     })
 }

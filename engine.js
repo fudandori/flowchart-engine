@@ -48,33 +48,30 @@ const centerPoint = id => {
 
 const isConditional = id => document.getElementById(id).hasAttribute('if')
 
-const getDelta = id => {
-  const el = document.getElementById(id)
-  if (isConditional(id)) return 45
-  if (el.hasAttribute('db') || el.hasAttribute('api')) return 45
-  if (el.hasAttribute('kafka')) return 35
+const isLeft = (origin, end) => {
+  return centerPoint(origin).x < centerPoint(end).x
+}
+
+const getDelta = (origin, end) => {
+  const el = document.getElementById(end)
+  if (isConditional(end)
+    || (!isLeft(origin, end)
+      && (el.hasAttribute('db') || el.hasAttribute('api'))))
+    return 45
+  if (!isLeft(origin, end) && el.hasAttribute('kafka')) return 35
   return 5
 }
 
 const getArrowVector = (origin, end) => {
-  const delta = isConditional(end) ? -34 : -5
-
   let p1, p2
 
-  if (centerPoint(origin).y < centerPoint(end).y) {
-
-    p1 = bottomPoint(origin)
-    p2 = topPoint(end)
-
-    p2.offsetY(delta)
-
-    return new Vector(p1, p2)
+  if (origin.isAbove(end) ) {
+    p1 = origin.bottom
+    p2 = end.topDelta
+  } else {
+    p1 = origin.top
+    p2 = end.bottomDelta
   }
-
-  p1 = topPoint(origin)
-  p2 = bottomPoint(end)
-
-  p2.offsetY(-delta)
 
   return new Vector(p1, p2)
 }
@@ -99,16 +96,35 @@ const createArrow = vector => {
 }
 
 const drawArrow = (from, to) => {
-  const vector = getArrowVector(from, to)
+  const fromPoint = centerPoint(from)
+  const toPoint = centerPoint(to)
+  const origin = new Box(from, fromPoint)
+  const end = new Box(to, toPoint)
+
+  const vector = getArrowVector(origin, end)
   const arrow = createArrow(vector)
   svg.appendChild(arrow)
 }
 
 const selectPort = (origin, end) => {
-  const d = getDelta(end)
+  const d = getDelta(origin, end)
   const diff = centerPoint(origin).x - centerPoint(end).x
   if (Math.abs(diff) < 3) {
-    return bottomPoint(end).offsetY(d)
+    if (centerPoint(origin).y < centerPoint(end).y) return topPoint(end).offsetY(isConditional(end) ? -35 : -5)
+    return bottomPoint(end).offsetY(isConditional(end) ? 35 : 5)
+  } else if (diff < 0) {
+    return leftPoint(end).offsetX(-d)
+  }
+
+  return rightPoint(end).offsetX(d)
+}
+
+const selectPortHz = (origin, end) => {
+  const d = getDelta(origin, end)
+  const diff = centerPoint(origin).x - centerPoint(end).x
+  if (Math.abs(diff) < 3) {
+    if (centerPoint(origin).y < centerPoint(end).y) return topPoint(end).offsetY(isConditional(end) ? -35 : -5)
+    return bottomPoint(end).offsetY(isConditional(end) ? 35 : 5)
   } else if (diff < 0) {
     return leftPoint(end).offsetX(-d)
   }
@@ -120,6 +136,10 @@ const midpointY = (origin, end) => {
   return (centerPoint(origin).y + centerPoint(end).y) / 2
 }
 
+const midpointX = (origin, end) => {
+  return (centerPoint(origin).x + centerPoint(end).x) / 2
+}
+
 const getVertex = (origin, end, x1) => {
   const abs = Math.abs(centerPoint(origin).x - centerPoint(end).x)
 
@@ -128,13 +148,18 @@ const getVertex = (origin, end, x1) => {
     : new Point(x1, midpointY(origin, end))
 }
 
+const getHzVertex = (origin, end, y1) => {
+  const abs = Math.abs(centerPoint(origin).y - centerPoint(end).y)
+  return abs > 10
+    ? new Point(centerPoint(end).x, y1)
+    : new Point(centerPoint(end).x, midpointX(origin, end))
+}
+
 const forkLine = (origin, end, type) => {
 
   const v1 = new Vector()
   const v2 = new Vector()
   let p1, p2, p3, p4, vertex
-
-
 
   switch (type) {
     case "top":
@@ -147,25 +172,26 @@ const forkLine = (origin, end, type) => {
 
     case "bottom":
       p1 = bottomPoint(origin)
-      p2 = { x: topEnd.x, y: p1.y }
-      p3 = { x: topEnd.x, y: p1.y }
-      p4 = topEnd.offsetY(delta)
+      vertex = getVertex(origin, end, p1.x)
+      p2 = vertex.offsetY(-1)
+      p3 = vertex
+      p4 = selectPort(origin, end)
       break
 
     case "left":
-      let rightEnd = rightPoint(end)
-      p1 = bottomPoint(origin)
-      p2 = { x: p1.x, y: rightEnd.y + 1 }
-      p3 = { x: p1.x, y: rightEnd.y }
-      p4 = rightEnd.offsetX(delta)
+      p1 = leftPoint(origin)
+      vertex = getHzVertex(origin, end, p1.y)
+      p2 = vertex.offsetY(-1)
+      p3 = vertex
+      p4 = selectPort(origin, end)
       break
 
     case "right":
-      let leftEnd = leftPoint(end)
-      p1 = bottomPoint(origin)
-      p2 = { x: p1.x, y: leftEnd.y + 1 }
-      p3 = { x: p1.x, y: leftEnd.y }
-      p4 = leftEnd.offsetX(delta)
+      p1 = rightPoint(origin)
+      vertex = getHzVertex(origin, end, p1.y)
+      p2 = vertex.offsetY(-1)
+      p3 = vertex
+      p4 = selectPort(origin, end)
       break
   }
 

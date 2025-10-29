@@ -28,7 +28,7 @@
     <db id="filter" next="fetch">FILTER OPERATION</db>
     <step id="accounts" next="kafka">ACCOUNTS DEFINITIONS</step>
     <step id="kafka" next="if">GENERATE EVENT</step>
-    <if id="if" next="dosmth">CONDITION 1</if>
+    <if id="if" next="dosmth" fork="calc,bottom;error,right">CONDITION 1</if>
     <group>
         <if id="calc" >CONDITION 2</if>
         <if id="error">SEND ERROR</if>

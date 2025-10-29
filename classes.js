@@ -152,11 +152,11 @@ class Box {
     }
 
     isVertAlignedWith(box) {
-        return Math.abs(this.#center.y - box.center.y) < 10
+        return Math.abs(this.#center.x - box.center.x) < 10
     }
 
     isHorizAlignedWith(box) {
-        return Math.abs(this.#center.x - box.center.x) < 10
+        return Math.abs(this.#center.y - box.center.y) < 10
     }
 
     isAbove(box) {
@@ -167,11 +167,13 @@ class Box {
         return this.#center.x - box.center.x < 0
     }
 
-    getSigma(target) {
-        const deltaX = target.center.x - this.#center.x
-        const deltaY = target.center.y - this.#center.y
+    getRelativePosition(box) {
+        if (this.isHorizAlignedWith(box)) return this.isBefore(box) ? 'left' : 'right'
+        else if (this.isVertAlignedWith(box)) return this.isAbove(box) ? 'top' : 'bottom'
+        else if (this.isAbove(box)) return this.isBefore(box) ? 'top-left' : 'top-right'
+        else return this.isBefore(box) ? 'bottom-left' : 'bottom-right'
 
-    }    
+    }
 
     getLvectors(target, port) {
         let vertex, targetPort
@@ -189,9 +191,22 @@ class Box {
                 break
         }
 
-        const v1 = new Vector(this[port], vertex)
+        const v1 = new Vector(this.center, vertex)
         const v2 = new Vector(vertex, targetPort)
 
         return [v1, v2]
+    }
+
+    getWordPoint(port) {
+        switch (port) {
+            case 'top':
+                return this.#top.offsetX(-5)
+            case 'bottom':
+                return this.#bottom.offsetX(-5).offsetY(10)
+            case 'left':
+                return this.#left.offsetY(-10)
+            case 'right':
+                return this.#right.offsetX(15).offsetY(-15)
+        }
     }
 }   

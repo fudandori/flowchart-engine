@@ -19,7 +19,7 @@
     <tooltips>
         <error3>Database info dwqd qdqwdqdq dqw dqw dqwwdqwd qwd qwd qwdqwwqdw qd qwd qwd qd q dq two</error3>
         <filter>Database info</filter>
-        <dosmth>TUS MUERTOS EN SALCHIPAPA</dosmth>
+        <error2>TUS MUERTOS EN SALCHIPAPA</error2>
     </tooltips>
 
     <!-- flowchart definition -->
@@ -28,10 +28,10 @@
     <db id="filter" next="fetch">FILTER OPERATION</db>
     <step id="accounts" next="kafka">ACCOUNTS DEFINITIONS</step>
     <step id="kafka" next="if">GENERATE EVENT</step>
-    <if id="if" next="dosmth" fork="calc,bottom;error,right">CONDITION 1</if>
+    <if id="if" yes="calc" no="error">CONDITION 1</if>
     <group>
-        <if id="calc" >CONDITION 2</if>
-        <if id="error">SEND ERROR</if>
+        <if id="calc" next="error2" >CONDITION 2</if>
+        <if id="error" no="filter,top">SEND ERROR</if>
     </group>
     <if id="dosmth">DO SOMETHING</if>
     <group>

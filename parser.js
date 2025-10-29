@@ -123,16 +123,16 @@ const renderGroups = () => {
 }
 
 const connect = () => {
-  document.querySelectorAll("div[next]")
+  document.querySelectorAll('div[next]')
     .forEach(el => {
       const origin = new Box(el.id)
-      const end = new Box(el.getAttribute("next"))
+      const end = new Box(el.getAttribute('next'))
       drawArrow(origin, end)
     })
 
-  document.querySelectorAll("div[fork]")
+  document.querySelectorAll('div[fork]')
     .forEach(el => {
-      el.getAttribute("fork")
+      el.getAttribute('fork')
         .split(';')
         .forEach(fork => {
           const split = fork.split(',')
@@ -143,6 +143,22 @@ const connect = () => {
 
           forkLine(origin, end, type)
         })
+    })
+
+  document.querySelectorAll('div[yes]')
+    .forEach(el => {
+      const origin = new Box(el.id)
+      const split = el.getAttribute('yes').split(',')
+      const end = new Box(split[0])
+      drawBranch(origin, end, 'YES', split[1])
+    })
+
+    document.querySelectorAll('div[no]')
+    .forEach(el => {
+      const origin = new Box(el.id)
+      const split = el.getAttribute('no').split(',')
+      const end = new Box(split[0])
+      drawBranch(origin, end, 'NO', split[1])
     })
 }
 

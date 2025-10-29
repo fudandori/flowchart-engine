@@ -167,6 +167,12 @@ class Box {
         return this.#center.x - box.center.x < 0
     }
 
+    getSigma(target) {
+        const deltaX = target.center.x - this.#center.x
+        const deltaY = target.center.y - this.#center.y
+
+    }    
+
     getLvectors(target, port) {
         let vertex, targetPort
 
@@ -174,7 +180,7 @@ class Box {
             case 'top':
             case 'bottom':
                 targetPort = this.isBefore(target) ? target.left : target.right
-                vertex = new Point(this[port].x, targetPort.y)
+                vertex = new Point(this.center.x, targetPort.y)
                 break
             case 'left':
             case 'right':
